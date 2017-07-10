@@ -1,6 +1,6 @@
 /*!
-CSSLint v1.0.4
-Copyright (c) 2016 Nicole Sullivan and Nicholas C. Zakas. All rights reserved.
+CSSLint v1.0.5
+Copyright (c) 2017 Nicole Sullivan and Nicholas C. Zakas. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the 'Software'), to deal
@@ -41,7 +41,7 @@ var CSSLint = (function() {
         embeddedRuleset = /\/\*\s*csslint([^\*]*)\*\//,
         api             = new parserlib.util.EventTarget();
 
-    api.version = "1.0.4";
+    api.version = "1.0.5";
 
     //-------------------------------------------------------------------------
     // Rule Management
@@ -1303,6 +1303,72 @@ CSSLint.addRule({
 
 });
 
+CSSLint.addRule({
+
+    // rule information
+    id: "multi-rules-newline",
+    name: "Multi rules must declear in multi lines",
+    desc: "Multi rules must declear in multi lines",
+    url: "",
+    browsers: "All",
+
+    // initialization
+    init: function(parser, reporter) {
+        "use strict";
+        var rule = this;
+
+        parser.addListener("startrule", function(event) {
+            var selectors = event.selectors;
+            // console.log(selectors);
+            // console.log('*********************************************');
+            // console.log(selectors[0].line);
+            // console.log(selectors[0].text);
+            // console.log(selectors[1].line);
+            // console.log(selectors[1].text);
+            //如果有多个rules
+            if (selectors.length > 1) {
+                var lines = [];
+                for (var i = 0; i < selectors.length; i++) {
+                    var line = selectors[i].line;
+                    if(lines.indexOf(line) !== -1){
+                        reporter.report("Multi rules must declear in multi lines.", selectors[i].line, selectors[i].col, rule);
+                        return;
+                    }
+                    lines.push(line);
+                }
+            }
+        });
+    }
+
+});
+CSSLint.addRule({
+
+    // rule information
+    id: "rule-name",
+    name: "Rule name must concat with -",
+    desc: "Rule name must concat with -",
+    url: "",
+    browsers: "All",
+
+    // initialization
+    init: function(parser, reporter) {
+        "use strict";
+        var rule = this;
+
+        parser.addListener("startrule", function(event) {
+            var selectors = event.selectors;
+            
+            for (var i = 0; i < selectors.length; i++) {
+                var text = selectors[i].text;
+                if(/[A-Z_]/.test(text)){
+                    reporter.report("Rule name must concat with -.", selectors[i].line, selectors[i].col, rule);
+                    return;
+                }
+            }
+        });
+    }
+
+});
 CSSLint.addRule({
 
     // rule information
