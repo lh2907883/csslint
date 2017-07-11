@@ -1867,12 +1867,6 @@ function include(path, sandbox) {
 
         name: "rule-name",
 
-        "Rule name must concat with -, not use uppercase": function() {
-            var result = CSSLint.verify(".fooName { }", { "rule-name": 1 });
-            Assert.areEqual("warning", result.messages[0].type);
-            Assert.areEqual("Rule name must concat with -.", result.messages[0].message);
-        },
-
         "Rule name must be concat with -, not _": function() {
             var result = CSSLint.verify(".foo_name { }", { "rule-name": 1 });
             Assert.areEqual("warning", result.messages[0].type);

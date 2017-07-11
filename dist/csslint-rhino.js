@@ -8918,7 +8918,7 @@ CSSLint.addRule({
             
             for (var i = 0; i < selectors.length; i++) {
                 var text = selectors[i].text;
-                if(/[A-Z_]/.test(text)){
+                if(/[_]/.test(text)){
                     reporter.report("Rule name must concat with -.", selectors[i].line, selectors[i].col, rule);
                     return;
                 }
